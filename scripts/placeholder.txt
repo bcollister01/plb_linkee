@@ -1,1 +1,2 @@
-This is a placeholder.
+This is a placeholder. 
+Here is a new line.
