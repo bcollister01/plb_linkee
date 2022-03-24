@@ -67,6 +67,7 @@ dependencies:
     - idna==2.10
     - importlib-metadata==4.11.2
     - importlib-resources==5.4.0
+    - iniconfig==1.1.1
     - ipykernel==6.9.1
     - ipython==7.32.0
     - ipython-genutils==0.2.0
@@ -121,6 +122,7 @@ dependencies:
     - pexpect==4.8.0
     - pickleshare==0.7.5
     - pillow==9.0.1
+    - pluggy==1.0.0
     - ply==3.11
     - portend==3.1.0
     - preshed==3.0.6
@@ -128,6 +130,7 @@ dependencies:
     - prompt-toolkit==3.0.28
     - protobuf==3.19.4
     - ptyprocess==0.7.0
+    - py==1.11.0
     - pyasn1==0.4.8
     - pyasn1-modules==0.2.8
     - pycausalimpact==0.1.1
@@ -140,6 +143,7 @@ dependencies:
     - pyppeteer==1.0.2
     - pyquery==1.4.3
     - pyrsistent==0.18.1
+    - pytest==7.1.1
     - python-dateutil==2.8.2
     - python-docx==0.8.11
     - pytz==2021.3
@@ -174,6 +178,7 @@ dependencies:
     - thinc==8.0.13
     - threadpoolctl==3.1.0
     - tokenizers==0.11.6
+    - tomli==2.0.1
     - toolz==0.11.2
     - torch==1.10.2
     - tornado==6.1
