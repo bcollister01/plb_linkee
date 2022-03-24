@@ -15,5 +15,5 @@ If you need to install new packages into this environment, the environment.yaml 
 
 ## Other commands
 
-- make tests: execute all tests in the tests folder
-- make lint: run black and flake8 over the Python scripts to ensure they follow Python style guides.
+- `make tests`: execute all tests in the tests folder
+- `make lint`: run black and flake8 over the Python scripts to ensure they follow Python style guides.
