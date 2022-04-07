@@ -35,7 +35,9 @@ env: | ${MODEL_ENV}
 ${MODEL_ENV}: | ${ENVS_DIR}
 	PIP_REQUIRE_VIRTUALENV=0 conda env create --prefix ${MODEL_ENV} -f ${MODEL_ENV_YAML} --insecure
 	source ${BASE_CONDA}/etc/profile.d/conda.sh &&
-	conda activate ${MODEL_ENV} && python -m ipykernel install --user --name ${MODEL_ENV_NAME}
+	conda activate ${MODEL_ENV} && python -m ipykernel install --user --name ${MODEL_ENV_NAME} \
+	./setup/install_packages.sh \
+	python setup/download_packages.py 
 
 env_yaml:
 	source ${BASE_CONDA}/etc/profile.d/conda.sh && \
