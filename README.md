@@ -12,14 +12,19 @@ If you need to install new packages into this environment, the environment.yaml 
 
 ### Option 2: Manual Method
 Run `conda env create --prefix envs/linkee --file environment.yaml`.
+
 Then activate into the created environment with `conda activate envs/linkee`.
+
 Run the lines `./setup/install_packages.sh` and `python setup/download_packages.py`.
 
 If you need to install new packages into this environment, the environment.yaml file can be updated using the following sequence of commands:
 
 `conda env export --no-builds -p envs/linkee grep -Ev "${USER}|name|prefix" > environment.yaml`
+
 `sed -i.bak '/pattern==/d' environment.yaml`
+
 `sed -i.bak '/en-core-web-sm/d' environment.yaml`
+
 `rm environment.yaml.bak`
 
 ### API Key
