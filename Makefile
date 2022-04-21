@@ -44,7 +44,7 @@ env_yaml:
 	conda activate ${MODEL_ENV} && \
 	conda env export --no-builds -p ${MODEL_ENV} \
 	| grep -Ev "${USER}|name|prefix" > ${MODEL_ENV_YAML} && \
-	sed -i.bak '/pattern==3.6/d' environment.yaml && \
+	sed -i.bak '/pattern==/d' environment.yaml && \
 	sed -i.bak '/en-core-web-sm/d' environment.yaml && \
 	rm environment.yaml.bak
 
