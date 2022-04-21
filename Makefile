@@ -43,7 +43,10 @@ env_yaml:
 	source ${BASE_CONDA}/etc/profile.d/conda.sh && \
 	conda activate ${MODEL_ENV} && \
 	conda env export --no-builds -p ${MODEL_ENV} \
-	| grep -Ev "${USER}|name|prefix" > ${MODEL_ENV_YAML}
+	| grep -Ev "${USER}|name|prefix" > ${MODEL_ENV_YAML} && \
+	sed -i.bak '/pattern==/d' environment.yaml && \
+	sed -i.bak '/en-core-web-sm/d' environment.yaml && \
+	rm environment.yaml.bak
 
 
 #######
