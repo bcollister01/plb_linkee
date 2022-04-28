@@ -1,5 +1,5 @@
 # plb_linkee
-Code for Linkee project
+Code for Lightbulb Linkee project
 
 ## Environment Setup
 
