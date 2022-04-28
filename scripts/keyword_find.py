@@ -1,8 +1,5 @@
-# from knowledge_graph import get_knowledge_graph_df, classify_input, collect_urls, tailored_search
+from knowledge_graph import KnowledgeGraph # get_knowledge_graph_df, classify_input, collect_urls, tailored_search
 from clean_text import CleanUpText
-import knowledge_graph
-# different knowledge
-# knowledge_graph.get_knowledge_graph_df()
 
 
 # Import packages
@@ -10,13 +7,13 @@ from pattern.text.en import singularize, pluralize
 import wikipedia
 import re
 import yake
-import nltk #For some reason, had to uninstall and reinstall
+import nltk # For some reason, had to uninstall and reinstall
 import numpy as np
 import pandas as pd
 
 
-
-Clean_text = CleanUpText()
+knowledge_graph = KnowledgeGraph
+clean_texts = CleanUpText()
 
 def get_wiki_links(urlList):
     """Extract the URLs linking to Wikipedia from a list of URLs"""
@@ -152,7 +149,7 @@ def find_text(input_text, keep_words=10000, cleanup=True, multi_links=True):
             text = wiki_autosuggest(input_text, keep_words=keep_words, suggest=True)
         except Exception as e:
             print(f"failed with {e}")
-            knowledge_graph_df = get_knowledge_graph_df(input_text)
+            knowledge_graph_df = knowledge_graph.get_knowledge_graph_df(input_text)
             if len(knowledge_graph_df) == 0:
                 print("No valid keyword")
                 # print("nothing found using knowledge graph, trying wiki")
@@ -160,7 +157,7 @@ def find_text(input_text, keep_words=10000, cleanup=True, multi_links=True):
                 # keyword vs
             else:
                 # Try to get wiki pages from knowledge graph
-                urlList = collect_urls(knowledge_graph_df)
+                urlList = knowledge_graph.collect_urls(knowledge_graph_df)
                 url_wiki = get_wiki_links(urlList)
                 if len(url_wiki) >= 1:
                     keep = min(len(url_wiki), 3)
@@ -171,10 +168,10 @@ def find_text(input_text, keep_words=10000, cleanup=True, multi_links=True):
                 else:
                     # Use the knowledge graph categories to find wikipedia url
                     print(" No wiki urls: 1st pass")
-                    category = classify_input(knowledge_graph_df)
-                    search_input = tailored_search(category, input_text)
+                    category = knowledge_graph.classify_input(knowledge_graph_df)
+                    search_input = knowledge_graph.tailored_search(category, input_text)
                     print(f"Searching for urls with input {search_input}")
-                    urlList = collect_urls(get_knowledge_graph_df(search_input))
+                    urlList = knowledge_graph.collect_urls(knowledge_graph.get_knowledge_graph_df(search_input))
                     url_wiki = get_wiki_links(urlList)
                     if len(url_wiki) >= 1:
                         keep = min(len(url_wiki), 3)
@@ -267,8 +264,8 @@ def select_keywords(words2):
         test_words = words2[0].lower().split()
         singles = [singularize(plural) for plural in test_words]
         plurals1 = [pluralize(single) for single in singles]
-        plurals2 = [Clean_text.ending_pluralize(single) for single in singles]
-        plurals3 = [Clean_text.add_s_pluralize(single) for single in singles]
+        plurals2 = [clean_texts.ending_pluralize(single) for single in singles]
+        plurals3 = [clean_texts.add_s_pluralize(single) for single in singles]
         test_words = list(set(test_words + singles + plurals1 + plurals2 + plurals3))
         previous_words = words3.copy()
         previous_words = [word for phrase in previous_words for word in phrase.split()]
@@ -292,7 +289,7 @@ def linkee_keywords(input_text):
     -------
     final_keywords (list): the list of possible keywords
     """
-    answer_list = Clean_text.tidy_input(input_text)
+    answer_list = clean_texts.tidy_input(input_text)
 
     # Keyword extraction
     text, key_url_terms = find_text(input_text)

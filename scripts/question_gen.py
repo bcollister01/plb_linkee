@@ -7,10 +7,11 @@ import nltk
 
 from clean_text import CleanUpText
 from keyword_find import find_text, answer_keyword_compare, linkee_keywords
-from knowledge_graph import get_knowledge_graph_df, classify_input
+from knowledge_graph import KnowledgeGraph
 import spacy
 nlp = spacy.load("en_core_web_sm")
 Clean_text = CleanUpText()
+Knowledge_graph = KnowledgeGraph()
 
 
 def fill_in_blank_q_generate(final_input, input_text, facts=1):
@@ -49,7 +50,7 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
     text = re.sub("\s\s+", " ", text)
 
     # Get category of input to better search for entity
-    category = classify_input(get_knowledge_graph_df(input_text))
+    category = Knowledge_graph.classify_input(KnowledgeGraph.get_knowledge_graph_df())
     # If person, just look for surname when trying to find facts
     if category == "Person":
         page_entity = input_text.split()[-1]

@@ -1,10 +1,12 @@
 from pattern.text.en import singularize, pluralize
 import re
 
+
 class CleanUpText():
     """Class that contains all clean up text functions"""
 
-    def ending_pluralize(self, noun):
+    @staticmethod
+    def ending_pluralize(noun):
         """Return most appropriate plural of the input word."""
         if re.search('[sxz]$', noun):
             return re.sub('$', 'es', noun)
@@ -19,14 +21,14 @@ class CleanUpText():
         """Naively add s to end of input word to create plural"""
         return noun + 's'
 
-    def tidy_input(self, input):
+    def tidy_input(self, input_text):
         """Take input word and tidy it up to create a list of options.
 
         We have a few different pluralize functions just to account for any
         misspellings online/words created when punctuation removed.
         """
 
-        input_words = input.split()
+        input_words = input_text.split()
 
         # Add singular forms of plurals and plural forms of singles
         singles = [singularize(plural) for plural in input_words]
@@ -37,7 +39,7 @@ class CleanUpText():
 
         input_words = input_words + [word.lower() for word in input_words]
         # If you want capitalized words as well
-        input_words = input_words + [word[0].upper() + word[1:] for word in input.split()]
+        input_words = input_words + [word[0].upper() + word[1:] for word in input_text.split()]
         input_words = input_words + [word.upper() for word in input_words]
 
         input_words = list(set(input_words))
@@ -45,7 +47,8 @@ class CleanUpText():
         return input_words
 
     # Cleanup function to clean up the fact at the end
-    def cleanup_fact(self, s):
+    @staticmethod
+    def cleanup_fact(s):
         """ Cleans up string by removing certain characters """
         strip_refs = re.compile("\.?\[\d+\]?")
         s = strip_refs.sub("", s).strip()
