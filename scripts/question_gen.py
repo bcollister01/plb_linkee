@@ -8,7 +8,6 @@ import nltk
 from clean_text import CleanUpText
 from keyword_find import find_text, answer_keyword_compare, linkee_keywords
 from knowledge_graph import KnowledgeGraph
-import spacy
 nlp = spacy.load("en_core_web_sm")
 Clean_text = CleanUpText()
 Knowledge_graph = KnowledgeGraph()
@@ -42,7 +41,7 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
     # Get Wikipedia page and text
     # using knowledge graph method
     text, key_url = find_text(page_name, keep_words=100000, cleanup=False, multi_links=False)
-    print(page_name)
+    # print(page_name)
     # text = (wikipedia.page(page_name,auto_suggest=False)).content
     text = re.sub(r'==.*?==+', '', text)
     # text = text.replace('\n', '')
@@ -50,7 +49,7 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
     text = re.sub("\s\s+", " ", text)
 
     # Get category of input to better search for entity
-    category = Knowledge_graph.classify_input(KnowledgeGraph.get_knowledge_graph_df())
+    category = Knowledge_graph.classify_input(Knowledge_graph.get_knowledge_graph_df(input_text))
     # If person, just look for surname when trying to find facts
     if category == "Person":
         page_entity = input_text.split()[-1]
@@ -162,28 +161,28 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
     return (question, num_statements)
 
 
-def generate_card(input_text):
+def generate_card(final_input):
     """Takes input and generates 4 question answer pairs"""
-    keywords = linkee_keywords(input_text)
+    keywords = linkee_keywords(final_input)
     answers = []  # Empty list to add answers we have questions for
     questions = []
     for answer in keywords:
         try:
-            question, num_statements = fill_in_blank_q_generate(input_text, answer, facts=2)
+            question, num_statements = fill_in_blank_q_generate(final_input, answer, facts=2)
         # except PageError:
         except:
             print(answer + ' does not have a Wikipedia page')
             continue
 
         if question == 'No facts found for input.':
-            print(answer + ' does not have facts')
+            # print(answer + ' does not have facts')
             continue
         else:
-            print(answer + ' does have facts')
+            # print(answer + ' does have facts')
             answers.append(answer)
             questions.append(question)
 
     for i in range(len(answers)):
         questions = [re.sub(answers[i], f"[keyword {i + 1}]", qus) for qus in questions]
-    print(answers, "; ", questions)
+    # print(answers, "; ", questions)
     return (answers, questions)
