@@ -79,12 +79,12 @@ class KnowledgeGraph:
         api_key = os.environ['GOOGLE_LINKEE_KEY']
         knowledge_graph_json = self.get_knowledge_graph(api_key, text_input)
         knowledge_graph_df = pd.json_normalize(knowledge_graph_json, record_path='itemListElement')
-        return knowledge_graph_df
         # Only using scores if knowledge graph actually returns something
         if len(knowledge_graph_df) > 0:
             max_score = max(knowledge_graph_df['resultScore'])
             knowledge_graph_df = knowledge_graph_df.loc[knowledge_graph_df['resultScore'] > threshold * max_score]
             index_match = knowledge_graph_df.index[knowledge_graph_df['result.name'] == text_input]
+            # Checking if exact final answer match is not at top and correcting it if it isn't
             if len(index_match) == 1:
                 n = index_match[0]
                 knowledge_graph_df = pd.concat([knowledge_graph_df.iloc[[n], :], knowledge_graph_df.drop(n, axis=0)],
