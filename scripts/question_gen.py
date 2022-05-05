@@ -115,9 +115,10 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
         print('Only one fact available for answer.')
         facts = 1
 
-    # Good tags for finding facts are numbers, proper nouns,
-    # foreign words and comparative/superlative adjectives/adverbs
-    good_tags = ['CD', 'FW', 'JJR', 'JJS', 'NNP', 'NNPS', 'RBR', 'RBRS']
+    # Good tags for finding facts are numbers (CD), proper nouns (NNP, NNPS),
+    # foreign words (FW) and comparative/superlative adjectives (JJR, JJS)
+    # and adverbs (RBR, RBS)
+    good_tags = ['CD', 'FW', 'JJR', 'JJS', 'NNP', 'NNPS', 'RBR', 'RBS']
     tag_count = []
     for i in range(len(uniqueStatements)):
         tag_tuples = nltk.pos_tag(uniqueStatements[i].split())
@@ -184,5 +185,7 @@ def generate_card(final_input):
 
     for i in range(len(answers)):
         questions = [re.sub(answers[i], f"[keyword {i + 1}]", qus) for qus in questions]
+        
     # print(answers, "; ", questions)
     return (answers, questions)
+
