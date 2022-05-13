@@ -8,6 +8,7 @@ import nltk
 from clean_text import CleanUpText
 from keyword_find import find_text, answer_keyword_compare, linkee_keywords
 from knowledge_graph import KnowledgeGraph
+
 nlp = spacy.load("en_core_web_sm")
 Clean_text = CleanUpText()
 Knowledge_graph = KnowledgeGraph()
@@ -115,10 +116,9 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
         print('Only one fact available for answer.')
         facts = 1
 
-    # Good tags for finding facts are numbers (CD), proper nouns (NNP, NNPS),
-    # foreign words (FW) and comparative/superlative adjectives (JJR, JJS)
-    # and adverbs (RBR, RBS)
-    good_tags = ['CD', 'FW', 'JJR', 'JJS', 'NNP', 'NNPS', 'RBR', 'RBS']
+    # Good tags for finding facts are numbers, proper nouns,
+    # foreign words and comparative/superlative adjectives/adverbs
+    good_tags = ['CD', 'FW', 'JJR', 'JJS', 'NNP', 'NNPS', 'RBR', 'RBRS']
     tag_count = []
     for i in range(len(uniqueStatements)):
         tag_tuples = nltk.pos_tag(uniqueStatements[i].split())
@@ -182,10 +182,10 @@ def generate_card(final_input):
             # print(answer + ' does have facts')
             answers.append(answer)
             questions.append(question)
-
-    for i in range(len(answers)):
-        questions = [re.sub(answers[i], f"[keyword {i + 1}]", qus) for qus in questions]
-        
-    # print(answers, "; ", questions)
-    return (answers, questions)
-
+    if len(answers) >= 4:
+        for i in range(4):
+            questions = [re.sub(answers[i], f"[keyword {i + 1}]", qus) for qus in questions]
+        # print(answers, "; ", questions)
+        return (answers, questions)
+    else:
+        return 'not_enough_answers', 'not_enough_questions'

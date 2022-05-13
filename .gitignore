@@ -4,3 +4,8 @@ envs/
 *.pyc
 *.pdf
 *.png
+*.DS_Store
+nohup.out
+notebooks/tables_load.ipynb
+
+
