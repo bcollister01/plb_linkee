@@ -55,7 +55,16 @@ def get_wiki_text(url_wiki, keep_words=10000):
         try:
             text_wiki = (wikipedia.page(wiki_term, auto_suggest=False)).content
         except KeyError:  # fullurl errors can be caused by unicode or other symbols
-            text_wiki = (wikipedia.page(wiki_term, auto_suggest=True)).content
+            try:
+                text_wiki = (wikipedia.page(wiki_term, auto_suggest=True)).content
+            except Exception as err:
+                er_var = err
+                if type(er_var) == wikipedia.exceptions.DisambiguationError:
+                    input_text_page = str(er_var).split('may refer to:')[1].split('\n')[1]
+                    text_wiki = (wikipedia.page(input_text_page, auto_suggest=False)).content
+                else:
+                    print(err.args)
+                    raise ValueError(f'No urls found for {input}')
         # This will drop headers surrounded by ==
         text_wiki = re.sub(r'==.*?==+', '', text_wiki)
         paras = text_wiki.split('\n\n')
@@ -99,8 +108,13 @@ def wiki_autosuggest(input, keep_words=10000, suggest=False):
     try:
         text_wiki = (wikipedia.page(input, auto_suggest=suggest)).content
     except Exception as err:
-        print(err.args)
-        raise ValueError(f'No urls found for {input}')
+        er_var = err
+        if type(er_var) == wikipedia.exceptions.DisambiguationError:
+            input_text_page = str(er_var).split('may refer to:')[1].split('\n')[1]
+            text_wiki = (wikipedia.page(input_text_page, auto_suggest=False)).content
+        else:
+            print(err.args)
+            raise ValueError(f'No urls found for {input}')
         # if no exception raised clean up text
     # This will drop headers surrounded by ==
     text_wiki = re.sub(r'==.*?==+', '', text_wiki)
@@ -295,16 +309,22 @@ def linkee_keywords(input_text):
     text, key_url_terms = find_text(input_text)
 
     # Potentially here combine 1-gram, 2-gram, 3-gram results
-    words_df = pd.DataFrame()
-    words = (keyword_extract(text, 2))[0]  # + (keyword_extract(text, 1))[0] + (keyword_extract(text, 3))[0]
-    scores = (keyword_extract(text, 2))[1]  # + (keyword_extract(text, 1))[1] + (keyword_extract(text, 3))[1]
-    words_df['words'] = words
-    words_df['scores'] = scores
-    words_df.sort_values(by=['scores'], ascending=False)
-    words_df = words_df[:100]
+    # words_df = pd.DataFrame()
+    words2 = (keyword_extract(text, 2))[0]
+    words1 = (keyword_extract(text, 1))[0]
+    words3 = (keyword_extract(text, 3))[0]
+
+    # scores = (keyword_extract(text, 2))[1] + (keyword_extract(text, 1))[1] + (keyword_extract(text, 3))[1]
+    # words_df['words'] = words
+    # words_df['scores'] = scores
+    # words_df.sort_values(by=['scores'], ascending=False)
+    # words_df = words_df[:100]
+
 
     # Adding wikipedia page names to the words found at the top
-    words = key_url_terms + words
+    top_list = []
+    extra_list = []
+    words = key_url_terms + words2[0:3] + words1[0:3] + words2[3:]
 
     # Cleaning up returned keywords
     words2 = answer_keyword_compare(words, answer_list)

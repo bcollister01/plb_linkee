@@ -3,8 +3,12 @@ import pandas as pd
 from question_gen import generate_card
 from os.path import exists
 
-practice_list = ['Tom Hanks', 'Harry Potter', 'California', 'Willem Dafoe', 'Allstate', 'Las Vegas', 'Emerdale']
-additional_list = ['iphone', 'Arsenal', 'Belfast', 'Easter', 'Christmas', 'Cadbury', 'Green Goblin']
+practice_list = ['Tom Hanks', 'Harry Potter', 'California', 'Willem Dafoe', 'Allstate', 'Las Vegas', 'Emmerdale',
+                 'The Simpsons']
+additional_list = ['Spiderman', 'NCIS (TV series)', 'Criminal Minds', 'Charmed', 'Top Gear', 'Julia Roberts']
+
+    # ['iphone', 'Arsenal', 'Belfast', 'Easter', 'Christmas', 'Cadbury', 'Green Goblin', 'Emmerdale']
+
 
 
 # make this a command line entry instead and to load from existing df, make a copy and add to
@@ -57,7 +61,7 @@ def add_card(input_list):
         answers, questions = generate_card(final_answer)
         if answers != 'not_enough_answers':
             df.loc[l] = [final_answer, answers[0], questions[0], answers[1], questions[1], answers[2], questions[2],
-                         answers[3], questions[3], "no"]
+                         answers[3], questions[3], "U"]
     df.to_csv("Linkee_records.csv", index=False)
     print("file saved")
 
@@ -68,7 +72,7 @@ def add_card(input_list):
 if __name__ == '__main__':
     # answers, questions = generate_card("Tom Hanks")
     # print(answers, questions)
-    add_card(city_list)
+    add_card(additional_list) # + additional_list + city_list)
     print('question')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

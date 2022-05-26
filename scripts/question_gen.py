@@ -113,7 +113,7 @@ def fill_in_blank_q_generate(final_input, input_text, facts=1):
 
     # Ensure code doesn't break if 2 facts are asked for but not available
     if len(uniqueStatements) == 1 and facts == 2:
-        print('Only one fact available for answer.')
+        # print('Only one fact available for answer.')
         facts = 1
 
     # Good tags for finding facts are numbers, proper nouns,
